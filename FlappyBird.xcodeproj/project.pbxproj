@@ -61,11 +61,11 @@
 				0494B611274D12BC0057D85C /* AppDelegate.swift */,
 				0494B613274D12BC0057D85C /* SceneDelegate.swift */,
 				0494B615274D12BC0057D85C /* ViewController.swift */,
+				0494B626274D1C3B0057D85C /* GameScene.swift */,
 				0494B617274D12BC0057D85C /* Main.storyboard */,
 				0494B61A274D12BD0057D85C /* Assets.xcassets */,
 				0494B61C274D12BD0057D85C /* LaunchScreen.storyboard */,
 				0494B61F274D12BD0057D85C /* Info.plist */,
-				0494B626274D1C3B0057D85C /* GameScene.swift */,
 			);
 			path = FlappyBird;
 			sourceTree = "<group>";
