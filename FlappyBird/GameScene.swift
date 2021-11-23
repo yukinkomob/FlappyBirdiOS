@@ -17,6 +17,11 @@ class GameScene: SKScene {
         scrollNode = SKNode()
         addChild(scrollNode)
         
+        setUpGround()
+        setUpCloud()
+    }
+    
+    func setUpGround() {
         let groundTexture = SKTexture(imageNamed: "ground")
         groundTexture.filteringMode = .nearest
         
@@ -47,5 +52,32 @@ class GameScene: SKScene {
         )
         
         addChild(groundSprite)
+    }
+    
+    func setUpCloud() {
+        let cloudTexture = SKTexture(imageNamed: "cloud")
+        cloudTexture.filteringMode = .nearest
+        
+        let needCloudNumber = Int(self.frame.size.width / cloudTexture.size().width) + 2
+        
+        let moveCloud = SKAction.moveBy(x: -cloudTexture.size().width, y: 0, duration: 20)
+        
+        let resetCloud = SKAction.moveBy(x: cloudTexture.size().width, y: 0, duration: 0)
+        
+        let repeatScrollCloud = SKAction.repeatForever(SKAction.sequence([moveCloud, resetCloud]))
+        
+        for i in 0..<needCloudNumber {
+            let sprite = SKSpriteNode(texture: cloudTexture)
+            sprite.zPosition = -100
+            
+            sprite.position = CGPoint(
+                x: cloudTexture.size().width / 2 + cloudTexture.size().width * CGFloat(i),
+                y: self.size.height - cloudTexture.size().height / 2
+            )
+            
+            sprite.run(repeatScrollCloud)
+            
+            scrollNode.addChild(sprite)
+        }
     }
 }
