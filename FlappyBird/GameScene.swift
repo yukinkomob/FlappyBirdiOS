@@ -11,6 +11,7 @@ class GameScene: SKScene {
 
     var scrollNode: SKNode!
     var wallNode: SKNode!
+    var bird: SKSpriteNode!
     
     override func didMove(to view: SKView) {
         backgroundColor = UIColor(red: 0.15, green: 0.75, blue: 0.90, alpha: 1)
@@ -24,6 +25,7 @@ class GameScene: SKScene {
         setUpGround()
         setUpCloud()
         setUpWall()
+        setUpBird()
     }
     
     func setUpGround() {
@@ -118,5 +120,22 @@ class GameScene: SKScene {
         let waitAnimation = SKAction.wait(forDuration: 2)
         let repeatForeverAnimation = SKAction.repeatForever(SKAction.sequence([createWallAnimation, waitAnimation]))
         wallNode.run(repeatForeverAnimation)
+    }
+    
+    func setUpBird() {
+        let birdTextureA = SKTexture(imageNamed: "bird_a")
+        birdTextureA.filteringMode = .linear
+        let birdTextureB = SKTexture(imageNamed: "bird_b")
+        birdTextureB.filteringMode = .linear
+        
+        let textureAnimation = SKAction.animate(with: [birdTextureA, birdTextureB], timePerFrame: 0.2)
+        let flap = SKAction.repeatForever(textureAnimation)
+        
+        bird = SKSpriteNode(texture: birdTextureA)
+        bird.position = CGPoint(x: self.frame.size.width * 0.2, y: self.frame.size.height * 0.7)
+        
+        bird.run(flap)
+        
+        addChild(bird)
     }
 }
