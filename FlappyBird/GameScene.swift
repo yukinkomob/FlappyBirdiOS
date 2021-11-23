@@ -30,6 +30,11 @@ class GameScene: SKScene {
         setUpBird()
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        bird.physicsBody?.velocity = CGVector.zero
+        bird.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 15))
+    }
+    
     func setUpGround() {
         let groundTexture = SKTexture(imageNamed: "ground")
         groundTexture.filteringMode = .nearest
