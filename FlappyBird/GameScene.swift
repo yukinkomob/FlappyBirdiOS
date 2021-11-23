@@ -50,6 +50,8 @@ class GameScene: SKScene {
             )
             
             sprite.run(repeatScrollGround)
+            sprite.physicsBody = SKPhysicsBody(rectangleOf: groundTexture.size())
+            sprite.physicsBody?.isDynamic = false
             scrollNode.addChild(sprite)
         }
         
@@ -112,9 +114,13 @@ class GameScene: SKScene {
             let under_wall_y = under_wall_center_y + random_y
             let under = SKSpriteNode(texture: wallTexture)
             under.position = CGPoint(x: 0, y: under_wall_y)
+            under.physicsBody = SKPhysicsBody(rectangleOf: wallTexture.size())
+            under.physicsBody?.isDynamic = false
             wall.addChild(under)
             let upper = SKSpriteNode(texture: wallTexture)
             upper.position = CGPoint(x: 0, y: under_wall_y + wallTexture.size().height + slit_length)
+            upper.physicsBody = SKPhysicsBody(rectangleOf: wallTexture.size())
+            upper.physicsBody?.isDynamic = false
             wall.addChild(upper)
             wall.run(wallAnimation)
             self.wallNode.addChild(wall)
@@ -135,6 +141,8 @@ class GameScene: SKScene {
         
         bird = SKSpriteNode(texture: birdTextureA)
         bird.position = CGPoint(x: self.frame.size.width * 0.2, y: self.frame.size.height * 0.7)
+        
+        bird.physicsBody = SKPhysicsBody(circleOfRadius: bird.size.height / 2)
         
         bird.run(flap)
         
