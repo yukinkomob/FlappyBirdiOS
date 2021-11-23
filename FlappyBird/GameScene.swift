@@ -14,6 +14,8 @@ class GameScene: SKScene {
     var bird: SKSpriteNode!
     
     override func didMove(to view: SKView) {
+        physicsWorld.gravity = CGVector(dx: 0, dy: -4)
+        
         backgroundColor = UIColor(red: 0.15, green: 0.75, blue: 0.90, alpha: 1)
         
         scrollNode = SKNode()
