@@ -182,6 +182,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             scoreNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: upper.size.width, height: self.frame.size.height))
             scoreNode.physicsBody?.isDynamic = false
             scoreNode.physicsBody?.categoryBitMask = self.scoreCategory
+            scoreNode.physicsBody?.contactTestBitMask = self.birdCategory
             wall.addChild(scoreNode)
             
             wall.run(wallAnimation)
@@ -203,6 +204,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         bird = SKSpriteNode(texture: birdTextureA)
         bird.position = CGPoint(x: self.frame.size.width * 0.2, y: self.frame.size.height * 0.7)
+        
+        bird.physicsBody = SKPhysicsBody(circleOfRadius: bird.size.height / 2)
         
         bird.physicsBody?.allowsRotation = false
         
