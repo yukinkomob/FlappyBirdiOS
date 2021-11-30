@@ -19,6 +19,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let scoreCategory: UInt32 = 1 << 3
     
     var score = 0
+    var scoreLabelNode: SKLabelNode
+    var bestScoreLabelNode: SKLabelNode
+    let userDefaults: UserDefaults = UserDefaults.standard
     
     override func didMove(to view: SKView) {
         physicsWorld.gravity = CGVector(dx: 0, dy: -4)
@@ -36,6 +39,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         setUpCloud()
         setUpWall()
         setUpBird()
+        
+        setUpScoreLabel()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -55,6 +60,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if (contact.bodyA.categoryBitMask & scoreCategory) == scoreCategory || (contact.bodyB.categoryBitMask & scoreCategory) == scoreCategory {
             print("ScoreUp")
             score += 1
+            scoreLabelNode.text = "Score:\(score)"
+            
+            var bestScore = userDefaults.integer(forKey: "BEST")
+            if score > bestScore {
+                bestScore = score
+                scoreLabelNode.text = "Best Score:\(bestScore)"
+                userDefaults.setValue(bestScore, forKey: "BEST")
+                userDefaults.synchronize()
+            }
         } else {
             print("GameOver")
             scrollNode.speed = 0
@@ -69,6 +83,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func restart() {
         score = 0
+        scoreLabelNode.text = "Score:\(score)"
         
         bird.position = CGPoint(x: self.frame.size.width * 0.2, y: self.frame.size.height * 0.7)
         bird.physicsBody?.velocity = CGVector.zero
@@ -213,10 +228,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bird.physicsBody?.collisionBitMask = groundCategory | wallCategory
         bird.physicsBody?.contactTestBitMask = groundCategory | wallCategory
         
-        bird.physicsBody = SKPhysicsBody(circleOfRadius: bird.size.height / 2)
-        
         bird.run(flap)
         
         addChild(bird)
+    }
+    
+    func setUpScoreLabel() {
+        score = 0
+        scoreLabelNode = SKLabelNode()
+        scoreLabelNode.fontColor = UIColor.black
+        scoreLabelNode.position = CGPoint(x: 10, y: self.frame.size.height - 60)
+        scoreLabelNode.zPosition = 100
+        scoreLabelNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
+        scoreLabelNode.text = "Score:\(score)"
+        self.addChild(scoreLabelNode)
+        
+        bestScoreLabelNode = SKLabelNode()
+        bestScoreLabelNode.fontColor = UIColor.black
+        bestScoreLabelNode.position = CGPoint(x: 10, y: self.frame.size.height - 90)
+        bestScoreLabelNode.zPosition = 100
+        bestScoreLabelNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
+        
+        let bestScore = userDefaults.integer(forKey: "BEST")
+        bestScoreLabelNode.text = "Best Score:\(bestScore)"
+        self.addChild(bestScoreLabelNode)
     }
 }
