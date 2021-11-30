@@ -19,8 +19,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let scoreCategory: UInt32 = 1 << 3
     
     var score = 0
-    var scoreLabelNode: SKLabelNode
-    var bestScoreLabelNode: SKLabelNode
+    var scoreLabelNode: SKLabelNode!
+    var bestScoreLabelNode: SKLabelNode!
     let userDefaults: UserDefaults = UserDefaults.standard
     
     override func didMove(to view: SKView) {
