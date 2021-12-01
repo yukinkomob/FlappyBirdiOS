@@ -31,6 +31,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var score = 0
     var scoreLabelNode: SKLabelNode!
     var bestScoreLabelNode: SKLabelNode!
+    var itemScore = 0
+    var itemScoreLabelNode: SKLabelNode!
     let userDefaults: UserDefaults = UserDefaults.standard
     
     override func didMove(to view: SKView) {
@@ -77,8 +79,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             updateScore(score)
         } else if (contact.bodyA.categoryBitMask & itemCategory) == itemCategory || (contact.bodyB.categoryBitMask & itemCategory) == itemCategory {
             print("ScoreUp")
-            score += 2
-            updateScore(score)
+            itemScore += 1
+            itemScoreLabelNode.text = "Item Score:\(itemScore)"
             // TODO 音を表示する
             var itemBody: SKPhysicsBody
             if (contact.bodyA.categoryBitMask & itemCategory) == itemCategory {
@@ -304,10 +306,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bestScoreLabelNode.position = CGPoint(x: 10, y: self.frame.size.height - 90)
         bestScoreLabelNode.zPosition = 100
         bestScoreLabelNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
-        
         let bestScore = userDefaults.integer(forKey: "BEST")
         bestScoreLabelNode.text = "Best Score:\(bestScore)"
         self.addChild(bestScoreLabelNode)
+        
+        itemScore = 0
+        itemScoreLabelNode = SKLabelNode()
+        itemScoreLabelNode.fontColor = UIColor.black
+        itemScoreLabelNode.position = CGPoint(x: 10, y: self.frame.size.height - 120)
+        itemScoreLabelNode.zPosition = 100
+        itemScoreLabelNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
+        itemScoreLabelNode.text = "Item Score:\(itemScore)"
+        self.addChild(itemScoreLabelNode)
     }
     
     func updateScore(_ score: Int) {
