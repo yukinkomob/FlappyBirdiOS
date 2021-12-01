@@ -8,15 +8,24 @@
 import SpriteKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
+    
+    // 木の実を表示したい
+    // どこに表示する？壁と壁の間。とりあえず中間地点。壁3回に木の実1回くらい？
+    // とりあえず高さも固定
+    // まずはどこでもいいので木の実を表示
+    // 木の実もスクロールが必要
+    // 木の実と鳥が衝突したらイベント発生、Scoreに+2、木の実が消える
 
     var scrollNode: SKNode!
     var wallNode: SKNode!
     var bird: SKSpriteNode!
+    var itemNode: SKNode!
     
     let birdCategory: UInt32 = 1 << 0
     let groundCategory: UInt32 = 1 << 1
     let wallCategory: UInt32 = 1 << 2
     let scoreCategory: UInt32 = 1 << 3
+    let itemCategory: UInt32 = 1 << 4
     
     var score = 0
     var scoreLabelNode: SKLabelNode!
@@ -35,10 +44,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         wallNode = SKNode()
         scrollNode.addChild(wallNode)
         
+        itemNode = SKNode()
+        scrollNode.addChild(itemNode)
+        
         setUpGround()
         setUpCloud()
         setUpWall()
         setUpBird()
+        setUpItem()
         
         setUpScoreLabel()
     }
@@ -227,12 +240,48 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bird.physicsBody?.allowsRotation = false
         
         bird.physicsBody?.categoryBitMask = birdCategory
-        bird.physicsBody?.collisionBitMask = groundCategory | wallCategory
-        bird.physicsBody?.contactTestBitMask = groundCategory | wallCategory
+        bird.physicsBody?.collisionBitMask = groundCategory | wallCategory | itemCategory
+        bird.physicsBody?.contactTestBitMask = groundCategory | wallCategory | itemCategory
         
         bird.run(flap)
         
         addChild(bird)
+    }
+    
+    func setUpItem() {
+        let itemTexture = SKTexture(imageNamed: "seeds")
+        itemTexture.filteringMode = .linear
+        
+        let movingDistance = self.frame.size.width + itemTexture.size().width
+        let moveItem = SKAction.moveBy(x: -movingDistance, y: 0, duration: 4)
+        let removeItem = SKAction.removeFromParent()
+        let itemAnimation = SKAction.sequence([moveItem, removeItem])
+        let birdSize = SKTexture(imageNamed: "bird_a").size()
+        let slit_length = birdSize.height * 4
+        let random_y_range: CGFloat = 60
+        let groundSize = SKTexture(imageNamed: "ground").size()
+        let sky_center_y = groundSize.height + (self.frame.size.height - groundSize.height) / 2
+        let under_item_center_y = sky_center_y - slit_length / 2 - itemTexture.size().height / 2
+        let createItemAnimation = SKAction.run({
+            let item = SKSpriteNode()
+            item.position = CGPoint(x: self.frame.size.width + itemTexture.size().width / 2, y: 0)
+            item.zPosition = 0
+            let random_y = CGFloat.random(in: -random_y_range...random_y_range)
+            let under_item_y = under_item_center_y + random_y
+            
+            let item0 = SKSpriteNode(texture: itemTexture)
+            item0.position = CGPoint(x: 0, y: under_item_y)
+            item0.physicsBody = SKPhysicsBody(rectangleOf: itemTexture.size())
+            item0.physicsBody?.categoryBitMask = self.itemCategory
+            item0.physicsBody?.isDynamic = false
+            item.addChild(item0)
+            
+            item.run(itemAnimation)
+            self.itemNode.addChild(item)
+        })
+        let waitAnimation = SKAction.wait(forDuration: 2)
+        let repeatForeverAnimation = SKAction.repeatForever(SKAction.sequence([createItemAnimation, waitAnimation]))
+        itemNode.run(repeatForeverAnimation)
     }
     
     func setUpScoreLabel() {
