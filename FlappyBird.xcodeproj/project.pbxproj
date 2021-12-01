@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04686690275778B200DE8443 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0468668F275778B200DE8443 /* Sound.swift */; };
+		046866932757794300DE8443 /* eat_seeds.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 046866922757794300DE8443 /* eat_seeds.mp3 */; };
 		0494B612274D12BC0057D85C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0494B611274D12BC0057D85C /* AppDelegate.swift */; };
 		0494B614274D12BC0057D85C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0494B613274D12BC0057D85C /* SceneDelegate.swift */; };
 		0494B616274D12BC0057D85C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0494B615274D12BC0057D85C /* ViewController.swift */; };
@@ -17,6 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0468668F275778B200DE8443 /* Sound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sound.swift; sourceTree = "<group>"; };
+		046866922757794300DE8443 /* eat_seeds.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = eat_seeds.mp3; sourceTree = "<group>"; };
 		0494B60E274D12BC0057D85C /* FlappyBird.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlappyBird.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0494B611274D12BC0057D85C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0494B613274D12BC0057D85C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -64,8 +68,10 @@
 				0494B626274D1C3B0057D85C /* GameScene.swift */,
 				0494B617274D12BC0057D85C /* Main.storyboard */,
 				0494B61A274D12BD0057D85C /* Assets.xcassets */,
+				046866922757794300DE8443 /* eat_seeds.mp3 */,
 				0494B61C274D12BD0057D85C /* LaunchScreen.storyboard */,
 				0494B61F274D12BD0057D85C /* Info.plist */,
+				0468668F275778B200DE8443 /* Sound.swift */,
 			);
 			path = FlappyBird;
 			sourceTree = "<group>";
@@ -127,6 +133,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				046866932757794300DE8443 /* eat_seeds.mp3 in Resources */,
 				0494B61E274D12BD0057D85C /* LaunchScreen.storyboard in Resources */,
 				0494B61B274D12BD0057D85C /* Assets.xcassets in Resources */,
 				0494B619274D12BC0057D85C /* Main.storyboard in Resources */,
@@ -140,6 +147,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04686690275778B200DE8443 /* Sound.swift in Sources */,
 				0494B616274D12BC0057D85C /* ViewController.swift in Sources */,
 				0494B612274D12BC0057D85C /* AppDelegate.swift in Sources */,
 				0494B627274D1C3B0057D85C /* GameScene.swift in Sources */,

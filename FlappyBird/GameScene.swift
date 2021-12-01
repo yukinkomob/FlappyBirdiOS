@@ -35,6 +35,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var itemScoreLabelNode: SKLabelNode!
     let userDefaults: UserDefaults = UserDefaults.standard
     
+    let se = Sound()
+    
     override func didMove(to view: SKView) {
         physicsWorld.gravity = CGVector(dx: 0, dy: -4)
         physicsWorld.contactDelegate = self
@@ -82,6 +84,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             itemScore += 1
             itemScoreLabelNode.text = "Item Score:\(itemScore)"
             // TODO 音を表示する
+            self.run(se.music)
             var itemBody: SKPhysicsBody
             if (contact.bodyA.categoryBitMask & itemCategory) == itemCategory {
                 itemBody = contact.bodyA
@@ -105,6 +108,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func restart() {
         score = 0
+        itemScore = 0
         scoreLabelNode.text = "Score:\(score)"
         
         bird.position = CGPoint(x: self.frame.size.width * 0.2, y: self.frame.size.height * 0.7)
