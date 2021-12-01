@@ -26,6 +26,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let wallCategory: UInt32 = 1 << 2
     let scoreCategory: UInt32 = 1 << 3
     let itemCategory: UInt32 = 1 << 4
+    let category_none: UInt32 = 0
     
     var score = 0
     var scoreLabelNode: SKLabelNode!
@@ -73,15 +74,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if (contact.bodyA.categoryBitMask & scoreCategory) == scoreCategory || (contact.bodyB.categoryBitMask & scoreCategory) == scoreCategory {
             print("ScoreUp")
             score += 1
-            scoreLabelNode.text = "Score:\(score)"
-            
-            var bestScore = userDefaults.integer(forKey: "BEST")
-            if score > bestScore {
-                bestScore = score
-                scoreLabelNode.text = "Best Score:\(bestScore)"
-                userDefaults.setValue(bestScore, forKey: "BEST")
-                userDefaults.synchronize()
+            updateScore(score)
+        } else if (contact.bodyA.categoryBitMask & itemCategory) == itemCategory || (contact.bodyB.categoryBitMask & itemCategory) == itemCategory {
+            print("ScoreUp")
+            score += 2
+            updateScore(score)
+            // TODO 音を表示する
+            var itemBody: SKPhysicsBody
+            if (contact.bodyA.categoryBitMask & itemCategory) == itemCategory {
+                itemBody = contact.bodyA
+            } else {
+                itemBody = contact.bodyB
             }
+            itemBody.node!.removeFromParent()
+            itemBody.categoryBitMask = category_none
+            itemBody.contactTestBitMask = category_none
         } else {
             print("GameOver")
             scrollNode.speed = 0
@@ -97,8 +104,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func restart() {
         score = 0
         scoreLabelNode.text = "Score:\(score)"
-        let bestScore = userDefaults.integer(forKey: "BEST")
-        bestScoreLabelNode.text = "Best Score:\(bestScore)"
         
         bird.position = CGPoint(x: self.frame.size.width * 0.2, y: self.frame.size.height * 0.7)
         bird.physicsBody?.velocity = CGVector.zero
@@ -263,21 +268,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let sky_center_y = groundSize.height + (self.frame.size.height - groundSize.height) / 2
         let under_item_center_y = sky_center_y - slit_length / 2 - itemTexture.size().height / 2
         let createItemAnimation = SKAction.run({
-            let item = SKSpriteNode()
-            item.position = CGPoint(x: self.frame.size.width + itemTexture.size().width / 2, y: 0)
-            item.zPosition = 0
+            let itemContainer = SKSpriteNode()
+            itemContainer.position = CGPoint(x: self.frame.size.width + itemTexture.size().width / 2, y: 0)
+            itemContainer.zPosition = 0
             let random_y = CGFloat.random(in: -random_y_range...random_y_range)
             let under_item_y = under_item_center_y + random_y
             
-            let item0 = SKSpriteNode(texture: itemTexture)
-            item0.position = CGPoint(x: 0, y: under_item_y)
-            item0.physicsBody = SKPhysicsBody(rectangleOf: itemTexture.size())
-            item0.physicsBody?.categoryBitMask = self.itemCategory
-            item0.physicsBody?.isDynamic = false
-            item.addChild(item0)
+            let item = SKSpriteNode(texture: itemTexture)
+            item.position = CGPoint(x: 0, y: under_item_y)
+            item.physicsBody = SKPhysicsBody(rectangleOf: itemTexture.size())
+            item.physicsBody?.categoryBitMask = self.itemCategory
+            item.physicsBody?.isDynamic = false
+            itemContainer.addChild(item)
             
-            item.run(itemAnimation)
-            self.itemNode.addChild(item)
+            itemContainer.run(itemAnimation)
+            self.itemNode.addChild(itemContainer)
         })
         let waitAnimation = SKAction.wait(forDuration: 2)
         let repeatForeverAnimation = SKAction.repeatForever(SKAction.sequence([createItemAnimation, waitAnimation]))
@@ -303,5 +308,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let bestScore = userDefaults.integer(forKey: "BEST")
         bestScoreLabelNode.text = "Best Score:\(bestScore)"
         self.addChild(bestScoreLabelNode)
+    }
+    
+    func updateScore(_ score: Int) {
+        scoreLabelNode.text = "Score:\(score)"
+        
+        var bestScore = userDefaults.integer(forKey: "BEST")
+        if score > bestScore {
+            bestScore = score
+            bestScoreLabelNode.text = "Best Score:\(bestScore)"
+            userDefaults.setValue(bestScore, forKey: "BEST")
+            userDefaults.synchronize()
+        }
     }
 }
