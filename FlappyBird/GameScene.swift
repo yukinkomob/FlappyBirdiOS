@@ -83,8 +83,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             print("ScoreUp")
             itemScore += 1
             itemScoreLabelNode.text = "Item Score:\(itemScore)"
-            // TODO 音を表示する
-            self.run(se.music)
+            
+            self.run(se.eatSeedsSound)
+            
             var itemBody: SKPhysicsBody
             if (contact.bodyA.categoryBitMask & itemCategory) == itemCategory {
                 itemBody = contact.bodyA
@@ -94,10 +95,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             itemBody.node!.removeFromParent()
             itemBody.categoryBitMask = category_none
             itemBody.contactTestBitMask = category_none
+            let birdPosition = CGPoint(x: self.frame.size.width * 0.2, y: bird.position.y)
+            bird.position = birdPosition
         } else {
             print("GameOver")
             scrollNode.speed = 0
             bird.physicsBody?.collisionBitMask = groundCategory
+            
+            self.run(se.toneDownSound)
             
             let roll = SKAction.rotate(byAngle: CGFloat(Double.pi) * CGFloat(bird.position.y) * 0.01, duration: 1)
             bird.run(roll, completion: {
@@ -290,8 +295,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             itemContainer.run(itemAnimation)
             self.itemNode.addChild(itemContainer)
         })
-        let waitAnimation = SKAction.wait(forDuration: 2)
-        let repeatForeverAnimation = SKAction.repeatForever(SKAction.sequence([createItemAnimation, waitAnimation]))
+        let waitAnimation = SKAction.wait(forDuration: 1)
+        let repeatForeverAnimation = SKAction.repeatForever(SKAction.sequence([waitAnimation, createItemAnimation, waitAnimation]))
         itemNode.run(repeatForeverAnimation)
     }
     

@@ -9,5 +9,6 @@ import SpriteKit
 import Foundation
 
 class Sound {
-    let music = SKAction.playSoundFileNamed("eat_seeds.mp3", waitForCompletion: false)
+    let eatSeedsSound = SKAction.playSoundFileNamed("eat_seeds.mp3", waitForCompletion: false)
+    let toneDownSound = SKAction.playSoundFileNamed("tone_down.mp3", waitForCompletion: false)
 }
